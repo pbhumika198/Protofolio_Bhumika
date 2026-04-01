@@ -1,0 +1,108 @@
+body{
+font-family:'Segoe UI',sans-serif;
+margin:0;
+background:linear-gradient(135deg,#667eea,#764ba2);
+min-height:100vh;
+}
+
+.title{
+text-align:center;
+color:white;
+margin-top:20px;
+}
+
+.board{
+display:flex;
+justify-content:center;
+gap:20px;
+padding:30px;
+flex-wrap:wrap;
+}
+
+.column{
+background:rgba(255,255,255,0.2);
+backdrop-filter:blur(10px);
+border-radius:12px;
+padding:15px;
+width:260px;
+box-shadow:0 8px 20px rgba(0,0,0,0.2);
+text-align:center;
+}
+
+.task-list{
+min-height:200px;
+padding:10px;
+border:2px dashed rgba(255,255,255,0.4);
+margin-bottom:10px;
+}
+
+.task{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:white;
+color:#333;
+padding:10px;
+margin-bottom:10px;
+border-radius:8px;
+cursor:grab;
+box-shadow:0 4px 10px rgba(0,0,0,0.15);
+transition:0.2s;
+}
+
+.task:hover{
+transform:translateY(-3px);
+box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
+
+.task:active{
+cursor:grabbing;
+opacity:0.8;
+}
+
+.delete-btn{
+background:red;
+border:none;
+color:white;
+padding:4px 7px;
+border-radius:4px;
+cursor:pointer;
+}
+
+input{
+width:90%;
+padding:8px;
+border-radius:6px;
+border:none;
+margin:10px auto;
+display:block;
+}
+
+button{
+display:block;
+margin:10px auto;
+padding:7px 12px;
+border:none;
+background:#333;
+color:white;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+background:#555;
+}
+
+h2 span{
+background:#333;
+color:white;
+padding:2px 7px;
+border-radius:20px;
+font-size:12px;
+margin-left:5px;
+}
+
+
+
+
+

@@ -1,0 +1,232 @@
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width:60%;
+  height: auto;
+}
+
+
+/* Mobile Design */
+@media (max-width: 768px) {
+
+  section {
+    padding: 40px 20px;
+  }
+
+  /* HEADER */
+  .main-header {
+    flex-direction: row;
+    padding: 10px 20px;
+  }
+
+  .main {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .navbar {
+    display: none;
+    width: 100%;
+    background: #000;
+  }
+
+  .navbar.active {
+    display: block;
+  }
+
+  .navbar ul {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+  }
+
+  .navbar ul li a {
+    padding: 10px 0;
+    font-size: 14px;
+  }
+
+  .main-header button {
+    margin: 10px 0;
+  }
+
+  /* BANNER */
+  .main_banner {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 20px;
+  }
+  
+  .mainbanner h4 {
+    font-size: 26px;
+    text-align: center;
+  }
+
+  .mainbanner p {
+    font-size: 14px;
+    text-align: justify;
+  }
+
+  .mainbanner .btn {
+    margin: 20px auto;
+  }
+
+  .main_img img {
+    margin: 0 ;
+  }
+
+  /* ABOUT */
+  .aboutus {
+    flex-direction: column;
+    padding: 20px;
+    background-image:none;
+  }
+
+  .aboutus-img1 {
+    flex-direction: column;
+    text-align: justify;
+  }
+
+  .aboutus-img1 h4,
+  .aboutus-img1 p {
+    margin-left: 0;
+  }
+
+  .aboutus_img2 img {
+    width: 80%;
+    margin: 10px 10px;
+   
+  }
+
+  /* COURSES */
+  .course_contents p{
+    font-size: medium;
+    text-align: center;
+
+  }
+  .all_courses {
+    grid-template-columns: 1fr;
+  }
+
+  .course-card1 {
+    padding: 20px;
+  }
+
+  .course-en {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  /* WHY CHOOSE */
+  .why_choose {
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .choose-wc h5{
+    text-align: justify;
+    
+  }
+  .choose-wc p{
+    text-align: justify;
+    
+  }
+
+  .container1 {
+    grid-template-columns: 1fr;
+  }
+
+  /* LEARNER */
+  .learner {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .slide {
+    min-width: 100%;
+  }
+
+  /* ENROLL */
+  .enroll_in {
+    padding: 20px;
+  }
+
+  /* CONTACT */
+  .contacts {
+    padding: 20px;
+  }
+
+  .contacts_ref {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .copyright2 p{
+    line-height: 30px;
+  }
+
+}
+    
+   /* Tablet Design */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  section {
+    padding: 60px 40px;
+  }
+
+  .main-header {
+    padding: 10px 40px;
+  }
+
+  /* BANNER */
+  .main_banner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .mainbanner h4 {
+    font-size: 36px;
+  }
+
+  .main_img img {
+    width: 80%;
+    margin: 20px auto;
+  }
+
+  /* ABOUT */
+  .aboutus {
+    flex-direction: column;
+  }
+
+  .aboutus_img2 img {
+    width: 80%;
+    margin: auto;
+  }
+
+  /* COURSES */
+  .all_courses {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* WHY CHOOSE */
+  .why_choose {
+    flex-direction: column;
+  }
+
+  .container1 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* LEARNER */
+  .learner {
+    grid-template-columns: 1fr;
+  }
+
+}

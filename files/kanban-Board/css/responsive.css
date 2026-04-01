@@ -1,0 +1,41 @@
+/* Tablet */
+@media (max-width:768px){
+
+.board{
+flex-direction:row;
+overflow-x:auto;
+padding:20px;
+}
+
+.column{
+min-width:250px;
+}
+
+
+}
+/* Mobile Devices */
+ @media (max-width: 480px){
+
+.title{
+font-size:24px;
+}
+
+.column{
+width:65%;
+padding:12px;
+}
+
+.task{
+font-size:14px;
+padding:8px;
+}
+
+input{
+width:90%;
+}
+
+button{
+width:50%;
+}
+
+}
