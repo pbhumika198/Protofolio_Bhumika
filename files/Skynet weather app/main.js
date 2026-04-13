@@ -2,7 +2,7 @@ const apiKey = "747d341913591615216420c92e245281";
 
 // Get Weather
 async function getWeather(cityInput = null) {
-  const city = cityInput || document.getElementById("cityInput").value;
+  const city = cityInput || document.getElementById("cityInput").value.trim();
 
   if (!city) return;
 
@@ -18,11 +18,12 @@ async function getWeather(cityInput = null) {
     }
 
     updateUI(data);
-    getForecast(city);
-    saveCity(city);
+    getForecast(data.name);
+    saveCity(data.name);
 
   } catch (error) {
     alert("Error fetching weather ");
+    console.log(error);
   }
 }
 
@@ -44,50 +45,60 @@ function updateUI(data) {
     `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
 }
 
-// Forecast
+// Forecast + Hourly
 async function getForecast(city) {
   const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
 
-  const res = await fetch(url);
-  const data = await res.json();
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
 
-  let forecastHTML = "";
-  let hourlyHTML = "";
+    let forecastHTML = "";
+    let hourlyHTML = "";
 
-  // 5-day forecast
-  data.list.slice(0, 5).forEach(item => {
-    forecastHTML += `
-      <div class="forecast-card">
-        <p>${new Date(item.dt_txt).toLocaleDateString()}</p>
-        <p>${item.main.temp}°C</p>
-      </div>
-    `;
-  });
+    // 5-day forecast
+    data.list
+      .filter((item, index) => index % 8 === 0)
+      .slice(0, 5)
+      .forEach(item => {
+        forecastHTML += `
+          <div class="forecast-card">
+            <p>${new Date(item.dt_txt).toLocaleDateString()}</p>
+            <img src="https://openweathermap.org/img/wn/${item.weather[0].icon}.png" />
+            <p>${item.main.temp}°C</p>
+          </div>
+        `;
+      });
 
-  //  Hourly (next 12 hours)
-  data.list.slice(0, 8).forEach(item => {
-    const time = new Date(item.dt_txt).toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit'
+    // Hourly (next 12 hours)
+    data.list.slice(0, 8).forEach(item => {
+      const time = new Date(item.dt_txt).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      hourlyHTML += `
+        <div class="hour-card">
+          <p>${time}</p>
+          <img src="https://openweathermap.org/img/wn/${item.weather[0].icon}.png" />
+          <p>${item.main.temp}°C</p>
+        </div>
+      `;
     });
 
-    hourlyHTML += `
-      <div class="hour-card">
-        <p>${time}</p>
-        <img src="https://openweathermap.org/img/wn/${item.weather[0].icon}.png" />
-        <p>${item.main.temp}°C</p>
-      </div>
-    `;
-  });
+    document.getElementById("forecast").innerHTML = forecastHTML;
+    document.getElementById("hourly").innerHTML = hourlyHTML;
 
-  document.getElementById("forecast").innerHTML = forecastHTML;
-  document.getElementById("hourly").innerHTML = hourlyHTML;
+  } catch (error) {
+    console.log("Forecast error:", error);
+  }
 }
-// 🔍 Search Suggestions
+
+// Search Suggestions
 async function searchCity(query) {
   const suggestionsBox = document.getElementById("suggestions");
 
-  if (!query) {
+  if (!query.trim()) {
     suggestionsBox.innerHTML = "";
     return;
   }
@@ -116,25 +127,46 @@ async function searchCity(query) {
     });
 
   } catch (error) {
-    console.log("Error fetching suggestions");
+    console.log("Suggestion error:", error);
   }
 }
 
-// Save city
+// Save City
 function saveCity(city) {
+  city = city.toLowerCase();
+
   let cities = JSON.parse(localStorage.getItem("cities")) || [];
 
-  if (!cities.includes(city)) {
-    cities.unshift(city);
-  }
+  // remove duplicate
+  cities = cities.filter(c => c !== city);
 
+  // add to top
+  cities.unshift(city);
+
+  // keep only 5
   cities = cities.slice(0, 5);
 
   localStorage.setItem("cities", JSON.stringify(cities));
   showSavedCities();
 }
 
-// Show saved cities
+// Delete Single City
+function deleteCity(cityToDelete) {
+  let cities = JSON.parse(localStorage.getItem("cities")) || [];
+
+  cities = cities.filter(city => city !== cityToDelete);
+
+  localStorage.setItem("cities", JSON.stringify(cities));
+  showSavedCities();
+}
+
+// 🗑 Clear All Cities
+function clearAllCities() {
+  localStorage.removeItem("cities");
+  showSavedCities();
+}
+
+// Show Saved Cities
 function showSavedCities() {
   const cities = JSON.parse(localStorage.getItem("cities")) || [];
   const container = document.getElementById("cards");
@@ -144,9 +176,30 @@ function showSavedCities() {
   cities.forEach(city => {
     const card = document.createElement("div");
     card.className = "card";
-    card.innerText = city;
 
-    card.onclick = () => getWeather(city);
+    // city name
+    const name = document.createElement("span");
+    name.innerText = city;
+    name.style.cursor = "pointer";
+
+    name.onclick = () => getWeather(city);
+
+    // delete button
+    const delBtn = document.createElement("button");
+    delBtn.innerText = "❌";
+    delBtn.style.marginLeft = "10px";
+    delBtn.style.border = "none";
+    delBtn.style.background = "transparent";
+    delBtn.style.cursor = "pointer";
+    delBtn.style.color = "red";
+
+    delBtn.onclick = (e) => {
+      e.stopPropagation();
+      deleteCity(city);
+    };
+
+    card.appendChild(name);
+    card.appendChild(delBtn);
 
     container.appendChild(card);
   });
@@ -162,16 +215,21 @@ function getLocationWeather() {
 
       const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
 
-      const res = await fetch(url);
-      const data = await res.json();
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
 
-      updateUI(data);
+        updateUI(data);
+        getForecast(data.name);
 
+      } catch (error) {
+        console.log("GPS error:", error);
+      }
     });
   }
 }
 
-// Load on start
+// Load on Start
 window.onload = () => {
   showSavedCities();
 
